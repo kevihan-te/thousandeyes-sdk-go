@@ -1,0 +1,29 @@
+name: Release SDK
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: 'The target version you want to update and release'
+        required: true
+
+jobs:
+  release-sdk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Upgrade the version number in the go.mod
+        run: |
+          echo "Releasing the target version: ${{ github.event.inputs.releaseVersion }}"
+          sed -i "s|^\(module github.com/thousandeyes/thousandeyes-sdk-go/\).*|\1${{ github.event.inputs.releaseVersion }}|" go.mod
+
+      - name: Add tag and push to the repository
+        run: |
+          git config user.name "API Team"
+          git config user.email "api-team@thousandeyes.com"
+          git add .
+          git commit -m "[GitHub Bot] Released ${{ github.event.inputs.releaseVersion }} SDK"
+          git tag ${{ github.event.inputs.releaseVersion }}
+          git push origin ${{ github.event.inputs.releaseVersion }}
