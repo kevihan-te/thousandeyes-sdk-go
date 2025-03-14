@@ -27,4 +27,4 @@ jobs:
           git add .
           git commit -m "[GitHub Bot] Released ${{ github.event.inputs.releaseVersion }} SDK"
           git tag ${{ github.event.inputs.releaseVersion }}
-          git push ${{ github.event.inputs.releaseVersion }}
+          git push origin ${{ github.event.inputs.releaseVersion }}
