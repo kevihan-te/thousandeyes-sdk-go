@@ -26,5 +26,6 @@ jobs:
           git config user.email "api-team@thousandeyes.com"
           git add .
           git commit -m "[GitHub Bot] Released ${{ github.event.inputs.releaseVersion }} SDK"
+          git push origin
           git tag ${{ github.event.inputs.releaseVersion }}
           git push origin ${{ github.event.inputs.releaseVersion }}
