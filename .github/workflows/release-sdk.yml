@@ -21,6 +21,7 @@ jobs:
 
       - name: Add tag and push to the repository
         run: |
+          git branch
           git config user.name "API Team"
           git config user.email "api-team@thousandeyes.com"
           git add .
