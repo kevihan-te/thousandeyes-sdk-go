@@ -17,7 +17,8 @@ jobs:
       - name: Upgrade the version number in the go.mod
         run: |
           echo "Releasing the target version: ${{ github.event.inputs.releaseVersion }}"
-          sed -i "s|^\(module github.com/thousandeyes/thousandeyes-sdk-go/\).*|\1${{ github.event.inputs.releaseVersion }}|" go.mod
+          major_version=$(echo "${{ github.event.inputs.releaseVersion }}" | cut -d '.' -f 1)
+          sed -i "s|^\(module github.com/thousandeyes/thousandeyes-sdk-go/\).*|\1$major_version|" go.mod
 
       - name: Add tag and push to the repository
         run: |

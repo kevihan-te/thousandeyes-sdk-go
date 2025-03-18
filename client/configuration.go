@@ -10,24 +10,14 @@ import (
 	"strings"
 )
 
-// Configuration stores the configuration of the API client
-type Configuration struct {
-	userAgent  string
-	Debug      bool `json:"debug,omitempty"`
-	ServerURL  string
-	AuthToken  string
-	HTTPClient *http.Client
-	Context    context.Context
+var sdkVersion string
+
+func SDKVersion() string {
+	return sdkVersion
 }
 
-// NewConfiguration returns a new Configuration object
-func NewConfiguration() *Configuration {
-	cfg := &Configuration{
-		userAgent: fmt.Sprintf("ThousandEyesSDK-Go/%s", getCurrentModuleVersion()),
-		Debug:     false,
-		ServerURL: "https://api.thousandeyes.com/v7",
-	}
-	return cfg
+func init() {
+	sdkVersion = getCurrentModuleVersion()
 }
 
 func getCurrentModuleVersion() string {
@@ -43,6 +33,33 @@ func getCurrentModuleVersion() string {
 
 	parts := strings.Split(modFile.Module.Mod.Path, "/")
 	return parts[len(parts)-1]
+}
+
+// Configuration stores the configuration of the API client
+type Configuration struct {
+	UserAgent  string `json:"userAgent,omitempty"`
+	Debug      bool   `json:"debug,omitempty"`
+	ServerURL  string
+	AuthToken  string
+	HTTPClient *http.Client
+	Context    context.Context
+}
+
+// NewConfiguration returns a new Configuration object
+func NewConfiguration() *Configuration {
+	cfg := &Configuration{
+		Debug:     false,
+		ServerURL: "https://api.thousandeyes.com/v7",
+	}
+	return cfg
+}
+
+func (c *Configuration) GenerateUserAgent() string {
+	var sdkUserAgent = fmt.Sprintf("ThousandEyesSDK-Go/%s", SDKVersion())
+	if c.UserAgent == "" {
+		return sdkUserAgent
+	}
+	return sdkUserAgent + " " + c.UserAgent
 }
 
 func (c *Configuration) WithAuthToken(authToken string) *Configuration {

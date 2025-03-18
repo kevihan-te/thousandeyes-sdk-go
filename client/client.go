@@ -152,7 +152,7 @@ func (c *APIClient) PrepareRequest(
 	}
 
 	// Add the user agent to the request.
-	localVarRequest.Header.Add("User-Agent", c.cfg.userAgent)
+	localVarRequest.Header.Add("User-Agent", c.cfg.GenerateUserAgent())
 
 	// Bearer Authentication
 	if c.cfg.AuthToken != "" {
