@@ -14,10 +14,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Upgrade the version number in the go.mod
+      - name: Upgrade the version number in the configuration.go and go.mod files
         run: |
           echo "Releasing the target version: ${{ github.event.inputs.releaseVersion }}"
           major_version=$(echo "${{ github.event.inputs.releaseVersion }}" | cut -d '.' -f 1)
+          
+          sed -i "s|^\(var sdkVersion = \).*|\1\"${{ github.event.inputs.releaseVersion }}\"|" client/configuration.go
           sed -i "s|^\(module github.com/thousandeyes/thousandeyes-sdk-go/\).*|\1$major_version|" go.mod
 
       - name: Add tag and push to the repository

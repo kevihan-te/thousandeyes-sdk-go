@@ -3,36 +3,15 @@ package client
 import (
 	"context"
 	"fmt"
-	"golang.org/x/mod/modfile"
-	"log"
 	"net/http"
-	"os"
-	"strings"
 )
 
-var sdkVersion string
+// This sdkVersion will be updated by release-sdk.yml
+// Do not modify this line manually
+var sdkVersion = "v3"
 
 func SDKVersion() string {
 	return sdkVersion
-}
-
-func init() {
-	sdkVersion = getCurrentModuleVersion()
-}
-
-func getCurrentModuleVersion() string {
-	data, err := os.ReadFile("go.mod")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	modFile, err := modfile.Parse("go.mod", data, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	parts := strings.Split(modFile.Module.Mod.Path, "/")
-	return parts[len(parts)-1]
 }
 
 // Configuration stores the configuration of the API client
