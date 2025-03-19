@@ -33,7 +33,7 @@ func NewConfiguration() *Configuration {
 	return cfg
 }
 
-func (c *Configuration) GenerateUserAgent() string {
+func (c *Configuration) BuildUserAgent() string {
 	var sdkUserAgent = fmt.Sprintf("ThousandEyesSDK-Go/%s", SDKVersion())
 	if c.UserAgent == "" {
 		return sdkUserAgent
