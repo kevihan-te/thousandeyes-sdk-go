@@ -6,18 +6,22 @@ on:
       releaseVersion:
         description: 'The target version you want to update and release'
         required: true
+        type: string
 
 jobs:
   release-sdk:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Upgrade the version number in the go.mod
+      - name: Upgrade the version number in the configuration.go and go.mod files
         run: |
-          echo "Releasing the target version: ${{ github.event.inputs.releaseVersion }}"
-          sed -i "s|^\(module github.com/thousandeyes/thousandeyes-sdk-go/\).*|\1${{ github.event.inputs.releaseVersion }}|" go.mod
+          echo "Releasing the target version: ${{ inputs.releaseVersion }}"
+          major_version=$(echo "${{ inputs.releaseVersion }}" | cut -d '.' -f 1)
+          
+          sed -i "s|^\(var sdkVersion = \).*|\1\"${{ inputs.releaseVersion }}\"|" client/configuration.go
+          sed -i "s|^\(module github.com/thousandeyes/thousandeyes-sdk-go/\).*|\1$major_version|" go.mod
 
       - name: Add tag and push to the repository
         run: |
@@ -25,8 +29,8 @@ jobs:
           git config user.email "api-team@thousandeyes.com"
           
           git add .
-          git commit -m "[GitHub Bot] Released ${{ github.event.inputs.releaseVersion }} SDK"
+          git commit -m "[GitHub Bot] Released ${{ inputs.releaseVersion }} SDK"
           git push origin
           
-          git tag ${{ github.event.inputs.releaseVersion }}
-          git push origin ${{ github.event.inputs.releaseVersion }}
+          git tag ${{ inputs.releaseVersion }}
+          git push origin ${{ inputs.releaseVersion }}
