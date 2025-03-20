@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-// This sdkVersion will be updated by release.yml
+// This sdkVersion will be updated by release.yaml
 // Do not modify this line manually
 var sdkVersion = "v3"
 
