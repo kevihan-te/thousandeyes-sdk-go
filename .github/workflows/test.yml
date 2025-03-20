@@ -16,7 +16,8 @@ jobs:
       - name: Lint
         run: |
           go get golang.org/x/lint/golint
-          $GOPATH/bin/golint -set_exit_status
+          go install golang.org/x/lint/golint
+          ~/go/bin/golint -set_exit_status
 
       - name: Test
         run: go test -race -coverprofile=coverage.txt -covermode=atomic
